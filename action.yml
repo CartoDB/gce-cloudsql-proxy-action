@@ -33,17 +33,13 @@ runs:
           exit 5 
         fi
 
-        # stop and delete docker containers from previous runs
-        docker stop gce-cloudsql-proxy || true
-        docker rm -v gce-cloudsql-proxy
 
         # write google application credentials to a temporary file to be used inside the container
-        rm -rf /tmp/gce-cloudsql-proxy
         mkdir -p /tmp/gce-cloudsql-proxy
         echo '${{ inputs.creds }}' > /tmp/gce-cloudsql-proxy/key.json
 
         # start container
-        docker run -d --net host --name gce-cloudsql-proxy --restart on-failure \
+        docker run -d --net host --name gce-cloudsql-proxy --rm --restart on-failure \
         -v /tmp/gce-cloudsql-proxy:/tmp/gce-cloudsql-proxy \
         gcr.io/cloudsql-docker/gce-proxy:${{ inputs.proxy_version }} \
         /cloud_sql_proxy \
