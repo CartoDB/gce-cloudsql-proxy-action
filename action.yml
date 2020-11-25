@@ -34,8 +34,8 @@ runs:
         fi
 
         # stop and delete docker containers from previous runs
-        docker stop gce-cloudsql-proxy
-        docker rm gce-cloudsql-proxy
+        docker stop gce-cloudsql-proxy || true
+        docker rm -v gce-cloudsql-proxy
 
         # write google application credentials to a temporary file to be used inside the container
         rm -rf /tmp/gce-cloudsql-proxy
